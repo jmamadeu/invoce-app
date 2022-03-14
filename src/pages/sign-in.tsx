@@ -1,7 +1,10 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import Head from "next/head";
+
+import type { NextPage } from "next";
+
+import { FormInput } from "@/components/ui";
 
 const Home: NextPage = () => {
   return (
@@ -15,35 +18,17 @@ const Home: NextPage = () => {
       <main className="bg-darkPurple-100 h-screen flex">
         <div className="container mx-auto flex justify-center items-center">
           <form className="bg-gray-10 w-[21.25rem] rounded-xl p-4 py-12 gap">
+            <h3 className="text-gray-200 font-headline mb-4 text-2xl text-center">
+              Sign In
+            </h3>
             <div className="flex gap-4 flex-col">
-              <div className="flex flex-col gap-1">
-                <label
-                  htmlFor="username"
-                  className="text-gray-200 text-xs font-normal"
-                >
-                  Insert your work e-mail
-                </label>
-                <input
-                  className="bg-gray-25 py-3 pl-3 rounded-md placeholder:text-gray-50 placeholder:text-sm text-gray-200 text-sm"
-                  id="username"
-                  type="email"
-                  placeholder="jmamadeu@toptal.com"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label
-                  htmlFor="password"
-                  className="text-gray-200 text-xs font-normal"
-                >
-                  Insert your password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  className="bg-gray-25 py-3 pl-3 rounded-md placeholder:text-gray-50 placeholder:text-sm text-gray-200 text-sm"
-                  placeholder="******"
-                />
-              </div>
+              <FormInput name="username" label="Insert you email" type="text" />
+
+              <FormInput
+                name="password"
+                label="Insert you password"
+                type="password"
+              />
             </div>
 
             <div className="flex flex-col gap-8 mt-8">

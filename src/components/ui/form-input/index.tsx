@@ -4,7 +4,6 @@ type FormInputProperties = ComponentPropsWithRef<"input"> & {
   label?: string;
   name: string;
   type: string;
-  placeholder?: string;
 };
 
 export const FormInput = ({

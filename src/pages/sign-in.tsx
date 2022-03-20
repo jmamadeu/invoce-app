@@ -1,20 +1,14 @@
 import React from "react";
 import Link from "next/link";
-import Head from "next/head";
 
 import type { NextPage } from "next";
 
 import { FormInput } from "@/components/ui";
+import { PageWrapper } from "@/components/layouts/page-wrapper";
 
 const SignIn: NextPage = () => {
   return (
-    <React.Fragment>
-      <Head>
-        <title>Invoce App - Sign In</title>
-        <meta name="description" content="Invoce app" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+    <PageWrapper pageTitle="Sign In">
       <main className="bg-darkPurple-100 h-screen flex">
         <div className="container mx-auto flex justify-center items-center">
           <form className="bg-gray-10 w-[21.25rem] rounded-xl p-4 py-12 gap">
@@ -58,7 +52,7 @@ const SignIn: NextPage = () => {
           </form>
         </div>
       </main>
-    </React.Fragment>
+    </PageWrapper>
   );
 };
 

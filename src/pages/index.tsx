@@ -1,21 +1,15 @@
 import React from "react";
-import Head from "next/head";
 
 import type { NextPage } from "next";
 
 import { Header } from "@/components/layouts/header";
+import { PageWrapper } from "@/components/layouts/page-wrapper";
 import { DashboardClientsTable } from "@/views/dashboard/components/table";
 import { SectionTableHeader } from "@/views/dashboard/components/section-table-header";
 
 const Home: NextPage = () => {
   return (
-    <React.Fragment>
-      <Head>
-        <title>Invoice App</title>
-        <meta name="description" content="Invoice app" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
+    <PageWrapper pageTitle="Dashboard">
       <main className="bg-darkPurple-100 h-screen">
         <Header />
         <section className="container mx-auto text-white mt-4">
@@ -40,7 +34,7 @@ const Home: NextPage = () => {
           </div>
         </section>
       </main>
-    </React.Fragment>
+    </PageWrapper>
   );
 };
 

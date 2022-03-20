@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { FormInput } from "@/components/ui";
 
-const Home: NextPage = () => {
+const SignUp: NextPage = () => {
   return (
     <React.Fragment>
       <Head>
@@ -71,4 +71,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default SignUp;

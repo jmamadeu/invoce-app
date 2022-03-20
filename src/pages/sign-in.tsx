@@ -6,7 +6,7 @@ import type { NextPage } from "next";
 
 import { FormInput } from "@/components/ui";
 
-const Home: NextPage = () => {
+const SignIn: NextPage = () => {
   return (
     <React.Fragment>
       <Head>
@@ -62,4 +62,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default SignIn;

@@ -2,19 +2,25 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { signUpFormSchemaValidation } from "../utils";
-import { SignUpFormInputs } from "./types";
+import { CreateUserType } from "@/models/user/types";
 import { FormInput } from "@/components/ui";
+
+import { useUserAuth } from "@/contexts/use-user-auth";
 
 export const SignUpForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<SignUpFormInputs>({
+  } = useForm<CreateUserType>({
     resolver: yupResolver(signUpFormSchemaValidation)
   });
 
-  const onSubmit: SubmitHandler<SignUpFormInputs> = (data) => console.log(data);
+  const { signUp } = useUserAuth();
+
+  const onSubmit: SubmitHandler<CreateUserType> = async (userData) => {
+    signUp(userData);
+  };
 
   return (
     <>

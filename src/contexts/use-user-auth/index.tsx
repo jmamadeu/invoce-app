@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-import { UserAuthContextType, UserAuthProviderType } from "./types";
+import { UserAuthContextType } from "./types";
 import {
   CreateUserResponseType,
   CreateUserType,
@@ -12,7 +12,7 @@ export const UserAuthContext = createContext<UserAuthContextType>(
   {} as UserAuthContextType
 );
 
-export const UserAuthProvider = ({ children }: UserAuthProviderType) => {
+export const UserAuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<UserType | undefined>(undefined);
 
   const signUp = async (userData: CreateUserType) => {
@@ -21,11 +21,13 @@ export const UserAuthProvider = ({ children }: UserAuthProviderType) => {
         "/register",
         userData
       );
+
       console.log(createUserResponse.data.user_id);
+      return {};
 
       // setUser(createUserResponse.data);
     } catch (err: any) {
-      alert(err.response.data);
+      return { error: err.response.data };
     }
   };
 

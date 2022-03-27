@@ -1,11 +1,13 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+import { toast } from "react-toastify";
+
 import { signUpFormSchemaValidation } from "../utils";
 import { CreateUserType } from "@/models/user/types";
 import { FormInput } from "@/components/ui";
 
-import { useUserAuth } from "@/contexts/use-user-auth";
+import { useSignUp } from "@/hooks/use-sign-up";
 
 export const SignUpForm = () => {
   const {
@@ -16,10 +18,17 @@ export const SignUpForm = () => {
     resolver: yupResolver(signUpFormSchemaValidation)
   });
 
-  const { signUp } = useUserAuth();
+  const { mutateAsync: createUser, isLoading } = useSignUp();
 
-  const onSubmit: SubmitHandler<CreateUserType> = async (userData) => {
-    signUp(userData);
+  const onSubmit: SubmitHandler<CreateUserType> = async (
+    signUpUserData
+  ): Promise<void> => {
+    try {
+      const signUpResponse = await createUser(signUpUserData);
+      console.log(signUpResponse);
+    } catch (err: any) {
+      toast.error(err?.response?.data);
+    }
   };
 
   return (
@@ -56,9 +65,10 @@ export const SignUpForm = () => {
         />
         <div className="my-8">
           <button
+            disabled={isLoading}
             type="submit"
             title="sign up to use the app features"
-            className="bg-purple-100 hover:text-black text-white text-base py-3 rounded-md w-full"
+            className="bg-purple-100 disabled:cursor-not-allowed hover:bg-purple-200 text-white text-base py-3 rounded-md w-full"
           >
             Sign Up
           </button>

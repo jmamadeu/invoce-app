@@ -21,3 +21,5 @@ export type CreateUserType = Omit<UserType, "companyDetails"> & {
 export type CreateUserResponseType = {
   user_id: string;
 };
+
+export type CreateUserResponseErrorType = string;

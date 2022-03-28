@@ -4,6 +4,6 @@ import { UseFormRegisterReturn } from "react-hook-form";
 export type FormInputProperties = ComponentPropsWithRef<"input"> & {
   label?: string;
   type: string;
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
   error?: string;
 };

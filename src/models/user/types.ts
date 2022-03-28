@@ -10,12 +10,13 @@ type CompanyDetailsType = {
 export type UserType = {
   name: string;
   email: string;
-  password: string;
+  id: string;
   companyDetails?: CompanyDetailsType;
 };
 
 export type CreateUserType = Omit<UserType, "companyDetails"> & {
   confirmPassword: string;
+  password: string;
 };
 
 export type CreateUserResponseType = {
@@ -23,3 +24,21 @@ export type CreateUserResponseType = {
 };
 
 export type CreateUserResponseErrorType = string;
+
+export type SingInResponseType = {
+  user_id: string;
+  email: string;
+  name: string;
+  token: string;
+};
+
+export type SignInType = {
+  email: string;
+  password: string;
+};
+
+export type SignInResponseErrorType = string;
+
+export type UserDataToPersistType = UserType & {
+  token: string;
+};

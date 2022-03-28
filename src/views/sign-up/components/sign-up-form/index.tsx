@@ -1,13 +1,13 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { toast } from "react-toastify";
-
 import { signUpFormSchemaValidation } from "../utils";
 import { CreateUserType } from "@/models/user/types";
+
 import { FormInput } from "@/components/ui";
 
 import { useSignUp } from "@/hooks/use-sign-up";
+import { useUserAuth } from "@/contexts/use-user-auth";
 
 export const SignUpForm = () => {
   const {
@@ -18,17 +18,13 @@ export const SignUpForm = () => {
     resolver: yupResolver(signUpFormSchemaValidation)
   });
 
-  const { mutateAsync: createUser, isLoading } = useSignUp();
+  const { isLoading } = useSignUp();
+  const { signUp } = useUserAuth();
 
   const onSubmit: SubmitHandler<CreateUserType> = async (
     signUpUserData
   ): Promise<void> => {
-    try {
-      const signUpResponse = await createUser(signUpUserData);
-      console.log(signUpResponse);
-    } catch (err: any) {
-      toast.error(err?.response?.data);
-    }
+    signUp(signUpUserData);
   };
 
   return (

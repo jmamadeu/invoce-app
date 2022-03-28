@@ -1,8 +1,9 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 import { FormInput } from "@/components/ui";
 import { PageWrapper } from "@/components/layouts/page-wrapper";
+import { withAuth } from "@/guards/with-ssr-auth";
 
 const SetupMyCompany: NextPage = () => {
   return (
@@ -82,3 +83,9 @@ const SetupMyCompany: NextPage = () => {
 };
 
 export default SetupMyCompany;
+
+export const getServerSideProps: GetServerSideProps = withAuth(async () => {
+  return {
+    props: {}
+  };
+});

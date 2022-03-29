@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { NextPage } from "next";
 
 import { PageWrapper } from "@/components/layouts/page-wrapper";
-import { SignInForm } from "@/modules/sign-in/components/sign-in-form";
+import { SignInForm } from "@/views/sign-in/components/sign-in-form";
 
 const SignIn: NextPage = () => {
   return (

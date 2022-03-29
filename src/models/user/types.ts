@@ -1,4 +1,4 @@
-type CompanyDetailsType = {
+export type CompanyDetailsType = {
   name: string;
   address: string;
   vatNumber: string;

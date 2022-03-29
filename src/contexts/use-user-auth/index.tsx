@@ -12,13 +12,15 @@ import { destroyCookie } from "nookies";
 import { UserAuthContextType } from "./types";
 import {
   CreateUserType,
+  SignInFormInputsType,
   SignInType,
+  SingInResponseType,
   UserDataToPersistType,
   UserType
 } from "@/models/user/types";
 
-import { useSignUp } from "@/hooks/use-sign-up";
-import { useSignIn } from "@/hooks/use-sign-in";
+import { useSignUp } from "@/hooks/api/use-sign-up";
+import { useSignIn } from "@/hooks/api/use-sign-in";
 
 import { getClientUserCookie, setClientCookie } from "@/utils/cookies";
 
@@ -44,13 +46,13 @@ export const UserAuthProvider: React.FC = ({ children }) => {
   const { mutateAsync: login } = useSignIn();
   const { mutateAsync: createUser } = useSignUp();
 
-  useEffect(() => {
+  const getUserFromCookies = () => {
     const userFromCookies = getPersistedUserDataFromCookies();
 
     if (userFromCookies.token) {
       setUser(userFromCookies);
     }
-  }, [route]);
+  };
 
   const getUserTokenInfo = async (data: SignInType) => {
     const userTokenInfoResponse = await login(data);
@@ -58,29 +60,33 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     return userTokenInfoResponse;
   };
 
+  const persistUserToContextAndCookies = (user: SingInResponseType): void => {
+    setUser(() => {
+      const userToPersist: UserType = {
+        id: user.user_id,
+        email: user.email,
+        name: user.name
+      };
+
+      persistUserLoginInfoToCookies({
+        ...userToPersist,
+        token: user.token
+      });
+
+      return userToPersist;
+    });
+  };
+
   const signUp = async (userData: CreateUserType): Promise<void> => {
     try {
-      const signUpResponse = await createUser(userData);
+      await createUser(userData);
 
       const userDetails = await getUserTokenInfo({
         email: userData.email,
         password: userData.password
       });
 
-      setUser(() => {
-        const userToPersist: UserType = {
-          id: signUpResponse.user_id,
-          email: userDetails.email,
-          name: userDetails.name
-        };
-
-        persistUserLoginInfoToCookies({
-          ...userToPersist,
-          token: userDetails.token
-        });
-
-        return userToPersist;
-      });
+      persistUserToContextAndCookies(userDetails);
 
       replaceRoute("/setup-my-company");
     } catch (err: any) {
@@ -95,8 +101,24 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     navigateToRoute("/sign-in");
   }, []);
 
+  useEffect(() => {
+    getUserFromCookies();
+  }, [route]);
+
+  const signIn = useCallback(async (userToLogin: SignInFormInputsType) => {
+    try {
+      const userDetails = await getUserTokenInfo(userToLogin);
+
+      persistUserToContextAndCookies(userDetails);
+
+      navigateToRoute("/");
+    } catch (err: any) {
+      toast.error(`an error occured, ${err?.response?.data ?? ""}`);
+    }
+  }, []);
+
   return (
-    <UserAuthContext.Provider value={{ user, signUp, signOut }}>
+    <UserAuthContext.Provider value={{ user, signUp, signOut, signIn }}>
       {children}
     </UserAuthContext.Provider>
   );

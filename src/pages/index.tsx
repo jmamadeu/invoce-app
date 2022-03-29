@@ -1,11 +1,12 @@
 import React from "react";
 
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 
 import { Header } from "@/components/layouts/header";
 import { PageWrapper } from "@/components/layouts/page-wrapper";
-import { DashboardClientsTable } from "@/modules/dashboard/components/table";
-import { SectionTableHeader } from "@/modules/dashboard/components/section-table-header";
+import { DashboardClientsTable } from "@/views/dashboard/components/table";
+import { SectionTableHeader } from "@/views/dashboard/components/section-table-header";
+import { withAuth } from "@/guards/with-ssr-auth";
 
 const Home: NextPage = () => {
   return (
@@ -39,3 +40,9 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export const getServerSideProps: GetServerSideProps = withAuth(async () => {
+  return {
+    props: {}
+  };
+});

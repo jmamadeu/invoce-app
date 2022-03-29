@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signInFormSchemaValidation } from "./utils";
 import { FormInput } from "@/components/ui";
 import { SignInFormInputsType } from "@/models/user/types";
+import { useUserAuth } from "@/contexts/use-user-auth";
 
 export const SignInForm = () => {
   const {
@@ -14,8 +15,10 @@ export const SignInForm = () => {
     resolver: yupResolver(signInFormSchemaValidation)
   });
 
+  const { signIn } = useUserAuth();
+
   const onSubmit: SubmitHandler<SignInFormInputsType> = (data) => {
-    console.log(data);
+    signIn(data);
   };
 
   return (

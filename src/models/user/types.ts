@@ -37,6 +37,8 @@ export type SignInType = {
   password: string;
 };
 
+export type SignInFormInputsType = SignInType;
+
 export type SignInResponseErrorType = string;
 
 export type UserDataToPersistType = UserType & {

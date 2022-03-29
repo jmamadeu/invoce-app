@@ -1,7 +1,14 @@
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from "react";
 
+import { destroyCookie } from "nookies";
 import { UserAuthContextType } from "./types";
 import {
   CreateUserType,
@@ -23,16 +30,16 @@ const persistUserLoginInfoToCookies = (user: UserDataToPersistType): void => {
   setClientCookie("@invoice_app:user_login", user);
 };
 
-const getPersistedUserDataFromCookies = () => {
+export const getPersistedUserDataFromCookies = () => {
   return getClientUserCookie(
     "@invoice_app:user_login"
   ) as UserDataToPersistType;
 };
 
 export const UserAuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<UserType>({} as UserType);
+  const [user, setUser] = useState<UserType | null>(null);
 
-  const { replace: replaceRoute } = useRouter();
+  const { replace: replaceRoute, route, push: navigateToRoute } = useRouter();
 
   const { mutateAsync: login } = useSignIn();
   const { mutateAsync: createUser } = useSignUp();
@@ -40,16 +47,10 @@ export const UserAuthProvider: React.FC = ({ children }) => {
   useEffect(() => {
     const userFromCookies = getPersistedUserDataFromCookies();
 
-    if (!userFromCookies) {
-      replaceRoute("/sign-in");
+    if (userFromCookies.token) {
+      setUser(userFromCookies);
     }
-
-    if (!userFromCookies.companyDetails) {
-      replaceRoute("/setup-my-company");
-    }
-
-    setUser(userFromCookies);
-  }, []);
+  }, [route]);
 
   const getUserTokenInfo = async (data: SignInType) => {
     const userTokenInfoResponse = await login(data);
@@ -87,8 +88,15 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     }
   };
 
+  const signOut = useCallback(() => {
+    destroyCookie(null, "@invoice_app:user_login");
+    setUser(null);
+
+    navigateToRoute("/sign-in");
+  }, []);
+
   return (
-    <UserAuthContext.Provider value={{ user, signUp }}>
+    <UserAuthContext.Provider value={{ user, signUp, signOut }}>
       {children}
     </UserAuthContext.Provider>
   );

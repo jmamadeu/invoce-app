@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 import { PageWrapper } from "@/components/layouts/page-wrapper";
-import { SignUpForm } from "@/views/sign-up/components/sign-up-form";
+import { SignUpForm } from "@/modules/sign-up/components/sign-up-form";
 
 const SignUp: NextPage = () => {
   return (

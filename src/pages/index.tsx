@@ -4,8 +4,8 @@ import type { NextPage } from "next";
 
 import { Header } from "@/components/layouts/header";
 import { PageWrapper } from "@/components/layouts/page-wrapper";
-import { DashboardClientsTable } from "@/views/dashboard/components/table";
-import { SectionTableHeader } from "@/views/dashboard/components/section-table-header";
+import { DashboardClientsTable } from "@/modules/dashboard/components/table";
+import { SectionTableHeader } from "@/modules/dashboard/components/section-table-header";
 
 const Home: NextPage = () => {
   return (

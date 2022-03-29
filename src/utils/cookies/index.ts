@@ -10,5 +10,9 @@ export const setClientCookie = (key: string, data: any) => {
 export const getClientUserCookie = (key: string) => {
   const cookies = parseCookies();
 
-  return JSON.parse(cookies[key]);
+  if (!cookies[key]) {
+    return "";
+  }
+
+  return JSON?.parse(cookies[key]);
 };

@@ -2,9 +2,13 @@ import React from "react";
 import { PageWrapperType } from "../layouts.types";
 import { SEO } from "@/components/seo";
 
-export const PageWrapper = ({ pageTitle, children }: PageWrapperType) => (
-  <React.Fragment>
+export const PageWrapper = ({
+  pageTitle,
+  className,
+  children
+}: PageWrapperType) => (
+  <main className={className}>
     <SEO pageTitle={pageTitle} />
     {children}
-  </React.Fragment>
+  </main>
 );

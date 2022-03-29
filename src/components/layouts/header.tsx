@@ -1,7 +1,8 @@
 import { useUserAuth } from "@/contexts/use-user-auth";
+import { breakNameIntoInitials } from "@/utils/breakNameIntoInitials";
 
 export const Header = () => {
-  const { signOut } = useUserAuth();
+  const { signOut, user } = useUserAuth();
 
   return (
     <header className="bg-gray-10 p-6 flex justify-between items-center text-gray-200">
@@ -12,7 +13,7 @@ export const Header = () => {
       </div>
       <div>
         <span className="border-2 p-2 rounded-full hover:text-white hover:border-white transition mr-8">
-          JA
+          {breakNameIntoInitials(user?.name ?? "")}
         </span>
         <button
           type="button"

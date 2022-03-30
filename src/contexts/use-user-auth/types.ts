@@ -9,4 +9,5 @@ export type UserAuthContextType = {
   signUp: (user: CreateUserType) => Promise<void>;
   signOut: () => void;
   signIn: (credentials: SignInFormInputsType) => Promise<void>;
+  persistUserCompanyDetails: (user: UserType) => void;
 };

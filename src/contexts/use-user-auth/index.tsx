@@ -23,6 +23,8 @@ import { useSignUp } from "@/hooks/api/use-sign-up";
 import { useSignIn } from "@/hooks/api/use-sign-in";
 
 import { getClientUserCookie, setClientCookie } from "@/utils/cookies";
+import { api } from "@/services/api";
+import { useGetMe } from "@/hooks/api/use-get-me";
 
 export const UserAuthContext = createContext<UserAuthContextType>(
   {} as UserAuthContextType
@@ -38,6 +40,12 @@ export const getPersistedUserDataFromCookies = () => {
   ) as UserDataToPersistType;
 };
 
+const setTokenToAPI = (token: string) => {
+  api.defaults.headers.common = {
+    "x-access-token": token
+  };
+};
+
 export const UserAuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<UserType | null>(null);
 
@@ -45,9 +53,12 @@ export const UserAuthProvider: React.FC = ({ children }) => {
 
   const { mutateAsync: login } = useSignIn();
   const { mutateAsync: createUser } = useSignUp();
+  const { mutateAsync: getMe } = useGetMe();
 
-  const getUserFromCookies = () => {
+  const setUserFromCookies = () => {
     const userFromCookies = getPersistedUserDataFromCookies();
+
+    setTokenToAPI(userFromCookies.token);
 
     if (userFromCookies.token) {
       setUser(userFromCookies);
@@ -77,6 +88,14 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     });
   };
 
+  const persistUserCompanyDetails = useCallback((data: UserType) => {
+    const userFromCookies = getPersistedUserDataFromCookies();
+
+    persistUserLoginInfoToCookies({ ...data, token: userFromCookies.token });
+
+    setUser(data);
+  }, []);
+
   const signUp = async (userData: CreateUserType): Promise<void> => {
     try {
       await createUser(userData);
@@ -87,6 +106,8 @@ export const UserAuthProvider: React.FC = ({ children }) => {
       });
 
       persistUserToContextAndCookies(userDetails);
+
+      setTokenToAPI(userDetails.token);
 
       replaceRoute("/setup-my-company");
     } catch (err: any) {
@@ -101,15 +122,20 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     navigateToRoute("/sign-in");
   }, []);
 
-  useEffect(() => {
-    getUserFromCookies();
-  }, [route]);
-
   const signIn = useCallback(async (userToLogin: SignInFormInputsType) => {
     try {
       const userDetails = await getUserTokenInfo(userToLogin);
 
-      persistUserToContextAndCookies(userDetails);
+      setTokenToAPI(userDetails.token);
+
+      const me = await getMe();
+
+      persistUserLoginInfoToCookies({
+        ...me,
+        token: userDetails.token
+      });
+
+      setUser(me);
 
       navigateToRoute("/");
     } catch (err: any) {
@@ -117,8 +143,14 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    setUserFromCookies();
+  }, [route]);
+
   return (
-    <UserAuthContext.Provider value={{ user, signUp, signOut, signIn }}>
+    <UserAuthContext.Provider
+      value={{ user, signUp, signOut, signIn, persistUserCompanyDetails }}
+    >
       {children}
     </UserAuthContext.Provider>
   );

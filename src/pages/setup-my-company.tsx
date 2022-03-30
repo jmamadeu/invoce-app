@@ -1,27 +1,51 @@
 import type { GetServerSideProps, NextPage } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
 import { FormInput } from "@/components/ui";
 import { PageWrapper } from "@/components/layouts/page-wrapper";
 import { withAuth } from "@/guards/with-ssr-auth";
 import { Header } from "@/components/layouts/header";
 import { CompanyDetailsType } from "@/models/user/types";
 import { setupMyCompanyFormSchemaValidation } from "@/views/setup-my-component/utils";
+import { useSaveCompanyDetails } from "@/hooks/api/use-save-company-details";
+import { useUserAuth } from "@/contexts/use-user-auth";
 
 const SetupMyCompany: NextPage = () => {
+  const { persistUserCompanyDetails, user } = useUserAuth();
+  const { mutateAsync: saveCompanyDetails } = useSaveCompanyDetails();
+
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    reset
   } = useForm<CompanyDetailsType>({
-    resolver: yupResolver(setupMyCompanyFormSchemaValidation)
+    resolver: yupResolver(setupMyCompanyFormSchemaValidation),
+    defaultValues: user?.companyDetails?.data
   });
 
-  const onSubmit: SubmitHandler<CompanyDetailsType> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<CompanyDetailsType> = async (company) => {
+    try {
+      const companyDetailsResponse = await saveCompanyDetails(company);
+      if (!companyDetailsResponse.success) {
+        toast.error(`Something went wrong, Try again!`);
+        return;
+      }
+
+      persistUserCompanyDetails(companyDetailsResponse.user);
+
+      toast.success("Company details saved successfully!");
+    } catch (err: any) {
+      toast.error(`An error occurred: ${err?.response?.data}`);
+    }
   };
+
+  useEffect(() => {
+    reset(user?.companyDetails?.data);
+  }, [user]);
 
   return (
     <PageWrapper className="bg-darkPurple-100" pageTitle="Setup my company">
@@ -91,7 +115,7 @@ const SetupMyCompany: NextPage = () => {
                 title="sign in"
                 className="bg-purple-100 text-white text-base py-3 rounded-md"
               >
-                Sign Up
+                Save
               </button>
             </div>
           </form>

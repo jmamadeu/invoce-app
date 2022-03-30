@@ -7,11 +7,15 @@ export type CompanyDetailsType = {
   swift?: string;
 };
 
+export type CompanyDetailsResponseType = {
+  data: CompanyDetailsType;
+};
+
 export type UserType = {
   name: string;
   email: string;
   id: string;
-  companyDetails?: CompanyDetailsType;
+  companyDetails?: CompanyDetailsResponseType;
 };
 
 export type CreateUserType = Omit<UserType, "companyDetails"> & {
@@ -44,3 +48,5 @@ export type SignInResponseErrorType = string;
 export type UserDataToPersistType = UserType & {
   token: string;
 };
+
+export type UserCompanyDetailsResponse = { success: true; user: UserType };

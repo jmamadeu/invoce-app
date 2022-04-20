@@ -1,4 +1,12 @@
-import { FormInputProperties } from "./types";
+import type { ComponentPropsWithRef } from "react";
+import type { UseFormRegisterReturn } from "react-hook-form";
+
+export type FormInputProperties = ComponentPropsWithRef<"input"> & {
+  label?: string;
+  type: string;
+  register?: UseFormRegisterReturn;
+  error?: string;
+};
 
 export const FormInput = ({
   label,
@@ -8,7 +16,7 @@ export const FormInput = ({
   error,
   ...rest
 }: FormInputProperties) => (
-  <div className="flex flex-col gap-1">
+  <div className="flex flex-col gap-1 w-full">
     <label htmlFor={rest.name} className="text-gray-200 text-xs font-normal">
       {label}
     </label>

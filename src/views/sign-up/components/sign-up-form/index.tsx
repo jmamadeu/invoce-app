@@ -6,7 +6,7 @@ import { CreateUserType } from "@/models/user/types";
 
 import { FormInput } from "@/components/ui";
 
-import { useSignUp } from "@/hooks/api/use-sign-up";
+import { useSignUp } from "@/services/api/use-sign-up";
 import { useUserAuth } from "@/contexts/use-user-auth";
 
 export const SignUpForm = () => {

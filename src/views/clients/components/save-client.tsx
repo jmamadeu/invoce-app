@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { ClientFormProps, SaveClientForm } from "./save-client-form";
-import { useCreateClient } from "@/hooks/api/clients/use-clients";
+import { useCreateClient } from "@/services/api/clients/use-clients";
 
 export const saveClientFormSchemeValidation = yup
   .object()

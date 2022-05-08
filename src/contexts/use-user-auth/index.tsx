@@ -19,12 +19,12 @@ import {
   UserType
 } from "@/models/user/types";
 
-import { useSignUp } from "@/hooks/api/use-sign-up";
-import { useSignIn } from "@/hooks/api/use-sign-in";
+import { useSignUp } from "@/services/api/use-sign-up";
+import { useSignIn } from "@/services/api/use-sign-in";
 
 import { getClientUserCookie, setClientCookie } from "@/utils/cookies";
 import { api } from "@/services/api";
-import { useGetMe } from "@/hooks/api/use-get-me";
+import { useGetMe } from "@/services/api/use-get-me";
 
 export const UserAuthContext = createContext<UserAuthContextType>(
   {} as UserAuthContextType

@@ -2,7 +2,7 @@ import { Control, UseFormRegister, useFormState } from "react-hook-form";
 import type { FormEvent } from "react";
 
 import { FormInput } from "@/components/ui";
-import { ClientType } from "@/hooks/api/clients/use-clients";
+import { ClientType } from "@/services/api/clients/use-clients";
 
 export type ClientFormProps = Omit<ClientType, "id">;
 

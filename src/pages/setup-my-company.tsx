@@ -10,7 +10,7 @@ import { withAuth } from "@/guards/with-ssr-auth";
 import { Header } from "@/components/layouts/header";
 import { CompanyDetailsType } from "@/models/user/types";
 import { setupMyCompanyFormSchemaValidation } from "@/views/setup-my-component/utils";
-import { useSaveCompanyDetails } from "@/hooks/api/use-save-company-details";
+import { useSaveCompanyDetails } from "@/services/api/use-save-company-details";
 import { useUserAuth } from "@/contexts/use-user-auth";
 
 const SetupMyCompany: NextPage = () => {

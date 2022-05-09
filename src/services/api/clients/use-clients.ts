@@ -1,22 +1,10 @@
 import { AxiosError } from "axios";
 import { useMutation } from "react-query";
-import { CompanyDetailsType } from "@/models/user/types";
+
 import { api } from "@/services/api";
 
-export type ClientType = {
-  id: string;
-  email: string;
-  name: string;
-  companyDetails: CompanyDetailsType;
-};
-
-type ClientTypeResponse = {
-  success: boolean;
-  client: ClientType;
-};
-
-const createNewClient = async (client: Omit<ClientType, "id">) => {
-  const createUserResponse = await api.post<ClientTypeResponse>(
+const createNewClient = async (client: Omit<UserModule.Type, "id">) => {
+  const createUserResponse = await api.post<API.Auth.CreateClientResponse>(
     "/clients",
     client
   );
@@ -26,9 +14,9 @@ const createNewClient = async (client: Omit<ClientType, "id">) => {
 
 export const useCreateClient = () => {
   return useMutation<
-    ClientTypeResponse,
+    API.Auth.CreateClientResponse,
     AxiosError<string>,
-    Omit<ClientType, "id">,
+    Omit<UserModule.Type, "id">,
     () => void
   >(createNewClient);
 };

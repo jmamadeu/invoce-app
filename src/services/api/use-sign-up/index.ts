@@ -1,14 +1,10 @@
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
-import {
-  CreateUserResponseErrorType,
-  CreateUserResponseType,
-  CreateUserType
-} from "@/models/user/types";
+
 import { api } from "@/services/api";
 
-const createUser = async (userData: CreateUserType) => {
-  const createUserResponse = await api.post<CreateUserResponseType>(
+const createUser = async (userData: API.Auth.CreateUserParams) => {
+  const createUserResponse = await api.post<API.Auth.CreateUserResponse>(
     "/register",
     userData
   );
@@ -18,9 +14,9 @@ const createUser = async (userData: CreateUserType) => {
 
 export const useSignUp = () => {
   return useMutation<
-    CreateUserResponseType,
-    AxiosError<CreateUserResponseErrorType>,
-    CreateUserType,
+    API.Auth.CreateUserResponse,
+    AxiosError<API.Auth.CreateUserResponseError>,
+    API.Auth.CreateUserParams,
     () => void
   >(createUser);
 };

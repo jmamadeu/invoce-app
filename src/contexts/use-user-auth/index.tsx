@@ -10,14 +10,6 @@ import {
 
 import { destroyCookie } from "nookies";
 import { UserAuthContextType } from "./types";
-import {
-  CreateUserType,
-  SignInFormInputsType,
-  SignInType,
-  SingInResponseType,
-  UserDataToPersistType,
-  UserType
-} from "@/models/user/types";
 
 import { useSignUp } from "@/services/api/use-sign-up";
 import { useSignIn } from "@/services/api/use-sign-in";
@@ -30,14 +22,16 @@ export const UserAuthContext = createContext<UserAuthContextType>(
   {} as UserAuthContextType
 );
 
-const persistUserLoginInfoToCookies = (user: UserDataToPersistType): void => {
+const persistUserLoginInfoToCookies = (
+  user: UserModule.UserDataToPersist
+): void => {
   setClientCookie("@invoice_app:user_login", user);
 };
 
 export const getPersistedUserDataFromCookies = () => {
   return getClientUserCookie(
     "@invoice_app:user_login"
-  ) as UserDataToPersistType;
+  ) as UserModule.UserDataToPersist;
 };
 
 const setTokenToAPI = (token: string) => {
@@ -47,7 +41,7 @@ const setTokenToAPI = (token: string) => {
 };
 
 export const UserAuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<UserModule.Type | null>(null);
 
   const { replace: replaceRoute, route, push: navigateToRoute } = useRouter();
 
@@ -65,15 +59,17 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     }
   };
 
-  const getUserTokenInfo = async (data: SignInType) => {
+  const getUserTokenInfo = async (data: API.Auth.SignInParams) => {
     const userTokenInfoResponse = await login(data);
 
     return userTokenInfoResponse;
   };
 
-  const persistUserToContextAndCookies = (user: SingInResponseType): void => {
+  const persistUserToContextAndCookies = (
+    user: API.Auth.UserSignInResponse
+  ): void => {
     setUser(() => {
-      const userToPersist: UserType = {
+      const userToPersist: UserModule.Type = {
         id: user.user_id,
         email: user.email,
         name: user.name
@@ -88,7 +84,7 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     });
   };
 
-  const persistUserCompanyDetails = useCallback((data: UserType) => {
+  const persistUserCompanyDetails = useCallback((data: UserModule.Type) => {
     const userFromCookies = getPersistedUserDataFromCookies();
 
     persistUserLoginInfoToCookies({ ...data, token: userFromCookies.token });
@@ -96,7 +92,7 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     setUser(data);
   }, []);
 
-  const signUp = async (userData: CreateUserType): Promise<void> => {
+  const signUp = async (userData: API.Auth.CreateUserParams): Promise<void> => {
     try {
       await createUser(userData);
 
@@ -122,7 +118,7 @@ export const UserAuthProvider: React.FC = ({ children }) => {
     navigateToRoute("/sign-in");
   }, []);
 
-  const signIn = useCallback(async (userToLogin: SignInFormInputsType) => {
+  const signIn = useCallback(async (userToLogin: API.Auth.SignInParams) => {
     try {
       const userDetails = await getUserTokenInfo(userToLogin);
 

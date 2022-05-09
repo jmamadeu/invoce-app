@@ -1,26 +1,23 @@
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
-import {
-  CompanyDetailsType,
-  UserCompanyDetailsResponse
-} from "@/models/user/types";
+
 import { api } from "@/services/api";
 
-const saveMyCompanyDetails = async (company: CompanyDetailsType) => {
-  const companyDetailsResponse = await api.put<UserCompanyDetailsResponse>(
-    "/me/company",
-    {
+const saveMyCompanyDetails = async (
+  company: API.Auth.SaveMyCompanyDetailsParams
+) => {
+  const companyDetailsResponse =
+    await api.put<API.Auth.CreateUserCompanyDetailsResponse>("/me/company", {
       data: company
-    }
-  );
+    });
 
   return companyDetailsResponse.data;
 };
 
 export const useSaveCompanyDetails = () => {
   return useMutation<
-    UserCompanyDetailsResponse,
+    API.Auth.CreateUserCompanyDetailsResponse,
     AxiosError<string>,
-    CompanyDetailsType
+    API.Auth.SaveMyCompanyDetailsParams
   >(saveMyCompanyDetails);
 };

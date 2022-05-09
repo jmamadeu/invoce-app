@@ -1,23 +1,22 @@
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
-import {
-  SignInResponseErrorType,
-  SignInType,
-  SingInResponseType
-} from "@/models/user/types";
+
 import { api } from "@/services/api";
 
-const signIn = async (userData: SignInType) => {
-  const signInResponse = await api.post<SingInResponseType>("/login", userData);
+const signIn = async (userData: API.Auth.SignInParams) => {
+  const signInResponse = await api.post<API.Auth.UserSignInResponse>(
+    "/login",
+    userData
+  );
 
   return signInResponse.data;
 };
 
 export const useSignIn = () => {
   return useMutation<
-    SingInResponseType,
-    AxiosError<SignInResponseErrorType>,
-    SignInType,
+    API.Auth.UserSignInResponse,
+    AxiosError<API.Auth.SignInResponseError>,
+    API.Auth.SignInParams,
     () => void
   >(signIn);
 };

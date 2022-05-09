@@ -4,7 +4,6 @@ import {
   GetServerSidePropsResult
 } from "next";
 import { parseCookies } from "nookies";
-import { UserDataToPersistType } from "@/models/user/types";
 
 export function withAuth<T>(fn: GetServerSideProps<T>): GetServerSideTrops {
   return async (
@@ -21,7 +20,7 @@ export function withAuth<T>(fn: GetServerSideProps<T>): GetServerSideTrops {
       };
     }
 
-    const userFromCookies: UserDataToPersistType = JSON.parse(
+    const userFromCookies: UserModule.UserDataToPersist = JSON.parse(
       cookies["@invoice_app:user_login"]
     );
 
